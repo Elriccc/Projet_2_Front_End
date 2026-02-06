@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Register } from '../models/Register';
-import { HttpClient } from '@angular/common/http';
+import { Login } from '../models/Login';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,5 +12,12 @@ export class UserService {
 
   register(user: Register): Observable<Object> {
     return this.httpClient.post('/api/register', user);
+  }
+
+  login(user: Login): Observable<Object> {
+    let httpParams = new HttpParams()
+      .append('login', user.login)
+      .append('password', user.password) 
+    return this.httpClient.post('/api/login', httpParams, {responseType: 'text'});
   }
 }
