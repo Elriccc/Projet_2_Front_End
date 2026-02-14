@@ -19,12 +19,17 @@ export class RegisterComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private user: Register = {
+    firstName: '',
+    lastName: '',
+    login: '',
+    password: ''
+  }
   registerForm: FormGroup = new FormGroup({});
   submitted: boolean = false;
 
   ngOnInit() {
-    this.registerForm = this.formBuilder.group(
-      {
+    this.registerForm = this.formBuilder.group({
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
         login: ['', Validators.required],
@@ -42,20 +47,13 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    const registerUser: Register = {
-      firstName: this.registerForm.get('firstName')?.value,
-      lastName: this.registerForm.get('lastName')?.value,
-      login: this.registerForm.get('login')?.value,
-      password: this.registerForm.get('password')?.value
-    };
-    this.userService.register(registerUser)
+    Object.keys(this.user).forEach((key) => {
+      const typedKey = key as keyof Register;
+      this.user[typedKey] = this.registerForm.get(key)?.value
+    })
+    this.userService.register(this.user)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(
-      () => {
-        alert('Registered successfully :-D');
-        this.router.navigate(['/login']);
-      },
-    );
+      .subscribe(() => { this.router.navigate(['/login']);},);
   }
 
   onReset(): void {
