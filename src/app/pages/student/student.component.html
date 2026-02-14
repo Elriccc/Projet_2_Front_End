@@ -1,0 +1,159 @@
+
+<div class="card m-3">
+  <h5 class="card-header" data-cy="title">Student Form</h5>
+  <div class="card-body">
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Student number</label>
+        <input
+          type="text"
+          formControlName="studentNumber"
+          class="form-control"
+          *ngIf="!studentNumberId || studentNumberId !== 'new'"
+          readonly="true"
+          [ngClass]="{ 'is-invalid': submitted && form['studentNumber'].errors }"
+        />
+        <input
+          type="text"
+          formControlName="studentNumber"
+          class="form-control"
+          data-cy="studentNumber"
+          *ngIf="!studentNumberId || studentNumberId === 'new'"
+          [ngClass]="{ 'is-invalid': submitted && form['studentNumber'].errors }"
+        />
+        
+        @if (submitted && form['studentNumber'].errors) {
+          <div class="invalid-feedback">
+            @if (form['studentNumber'].errors?.['required']) {
+              <div>Student number is required</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>First name</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          class="form-control"
+          data-cy="firstName"
+          [ngClass]="{ 'is-invalid': submitted && form['firstName'].errors }"
+        />
+        @if (submitted && form['firstName'].errors) {
+          <div class="invalid-feedback">
+            @if (form['firstName'].errors?.['required']) {
+              <div>First name is required</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Last name</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          class="form-control"
+          data-cy="lastName"
+          [ngClass]="{ 'is-invalid': submitted && form['lastName'].errors }"
+        />
+        @if (submitted && form['lastName'].errors) {
+          <div class="invalid-feedback">
+            @if (form['lastName'].errors?.['required']) {
+              <div>Last name is required</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Birth date</label>
+        <input
+          type="date"
+          formControlName="birthDate"
+          class="form-control"
+          data-cy="birthDate"
+          [ngClass]="{ 'is-invalid': submitted && form['birthDate'].errors }"
+        />
+        @if (submitted && form['birthDate'].errors) {
+          <div class="invalid-feedback">
+            @if (form['birthDate'].errors?.['required']) {
+              <div>Birth date is required</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Phone number</label>
+        <input
+          type="text"
+          formControlName="phoneNumber"
+          class="form-control"
+          data-cy="phoneNumber"
+          [ngClass]="{ 'is-invalid': submitted && form['phoneNumber'].errors }"
+        />
+        @if (submitted && form['phoneNumber'].errors) {
+          <div class="invalid-feedback">
+            @if (form['phoneNumber'].errors?.['required']) {
+              <div>Phone number is incorrect</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="text"
+          formControlName="email"
+          class="form-control"
+          data-cy="email"
+          [ngClass]="{ 'is-invalid': submitted && form['email'].errors }"
+        />
+        @if (submitted && form['email'].errors) {
+          <div class="invalid-feedback">
+            @if (form['email'].errors?.['required']) {
+              <div>Email is incorrect</div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Subscribe start</label>
+        <input
+          type="date"
+          formControlName="subscribeStart"
+          class="form-control"
+          data-cy="subscribeStart"
+          [ngClass]="{ 'is-invalid': submitted && form['subscribeStart'].errors }"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Subscribe end</label>
+        <input
+          type="date"
+          formControlName="subscribeEnd"
+          class="form-control"
+          data-cy="subscribeEnd"
+          [ngClass]="{ 'is-invalid': submitted && form['subscribeEnd'].errors }"
+        />
+        @if (submitted && form['subscribeEnd'].errors) {
+          <div class="invalid-feedback">
+            @if (form['subscribeEnd'].errors?.['required']) {
+              <div>Subscribe end date must be after start date</div>
+            }
+          </div>
+        }
+      </div>
+ 
+      <div class="text-center">
+        <button data-cy="saveBtn" class="btn btn-primary mr-1">Save</button>
+        <button data-cy="cancelBtn" class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

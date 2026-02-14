@@ -1,10 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import { UserService } from '../../core/service/user.service';
 import { Login } from '../../core/models/Login';
-import { catchError, throwError } from 'rxjs';
+import { AuthUtils } from '../../core/utils/auth-utils'
+import { ErrorUtils } from '../../core/utils/error-utils'
 
 @Component({
   selector: 'app-login',
@@ -16,12 +18,18 @@ import { catchError, throwError } from 'rxjs';
 export class LoginComponent implements OnInit {
   private userService = inject(UserService);
   private formBuilder = inject(FormBuilder);
+  private authUtils = inject(AuthUtils);
+  private errorUtils = inject(ErrorUtils);
+  private router = inject(Router);
+  private user: Login = {
+    login: '',
+    password: ''
+  }
   loginForm: FormGroup = new FormGroup({});
   submitted: boolean = false;
 
   ngOnInit() {
-    this.loginForm = this.formBuilder.group(
-      {
+    this.loginForm = this.formBuilder.group({
         login: ['', Validators.required],
         password: ['', Validators.required]
       },
@@ -37,23 +45,18 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    const loginForm: Login = {
-      login: this.loginForm.get('login')?.value,
-      password: this.loginForm.get('password')?.value
-    };
-    this.userService.login(loginForm)
-      .pipe(catchError(error => {
-        console.log(error)
-        alert(error.message)
-        return throwError(() => new Error('Bad login or password'))
-      }))
+    Object.keys(this.user).forEach((key) => {
+      const typedKey = key as keyof Login;
+      this.user[typedKey] = this.loginForm.get(key)?.value
+    })
+
+    this.userService.login(this.user)
+      .pipe(this.errorUtils.returnErrorIfBadLoginOrPwd())
       .subscribe(jwt => {
-            sessionStorage.clear()
-            sessionStorage.setItem('accessToken', jwt.toString())
-            alert('Login successfully! :-D')
+          this.authUtils.setToken(jwt+'');
+          this.router.navigate(['/students']);
         }
       )
-      
   }
 
   onReset(): void {

@@ -1,0 +1,45 @@
+<div class="list-container">
+
+  <h5 data-cy="title">Students list</h5>
+
+  <table class="data-table" *ngIf="students && students.length > 0">
+      <thead>
+        <tr>
+          <th>Num</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Birth date</th>
+          <th>Phone number</th>
+          <th>Email</th>
+          <th>Subscribe start</th>
+          <th>Subscribe end</th>
+          <th class="actions-column">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{ student.studentNumber }}</td>
+          <td>{{ student.firstName }}</td>
+          <td>{{ student.lastName }}</td>
+          <td>{{ student.birthDate }}</td>
+          <td>{{ student.phoneNumber }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.subscribeStart }}</td>
+          <td>{{ student.subscribeEnd }}</td>
+          <td class="actions-column">
+            <button data-cy="editBtn" (click)="editStudent(student.studentNumber)">Edit</button>
+            <button data-cy="deleteBtn" (click)="deleteStudent(student.studentNumber)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+
+  <div *ngIf="!students || students.length === 0" class="empty-state" data-cy="emptyState">
+    No students.
+  </div>
+
+  <div class="text-center">
+    <button (click)="newStudent()" data-cy="newStudentBtn" class="btn btn-primary mr-1">New student</button>
+  </div>
+</div>
